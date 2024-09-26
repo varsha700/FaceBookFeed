@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FacebookFeed Page</title>
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
+    <link rel="stylesheet" href="{% static 'Bootstrap/css/bootstrap.min.css' %}"> 
+
+    <link rel="icon" href="http://www.facebook.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="http://www.facebook.com/favicon.ico" type="image/x-icon">
+</head>
+
+<body id="HomeBody">    
+    <div>
+        <img src="{% static '/images/fcbk.png' %}" alt="fblogo" height="5%" width="5%">
+    </div>
+    <div class="header">
+        <h1>Hello <b>{{name}}!!</b></h1>
+    </div><br><br><br>
+    <div>
+       <b><p>Login required to view your feed</p><b><a href="{% url 'login' %}"><button type="button" class="btn btn-primary"> Login</button></a>
+    </div>
+    </body>
+</html>
