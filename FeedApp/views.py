@@ -7,9 +7,11 @@ from django.contrib import messages
 from .models import Message, Comment, Like
 from django.http import JsonResponse
 
+#FeedApp Home method
 def  SHome(req):
     UserName= "User"    
     return render(req,"index.html",{"name":UserName})
+    
 # Register method
 def register(request):
     if request.method == 'POST':
