@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Feed</title>
+    
+    <!-- Bootstrap and custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'Bootstrap/css/bootstrap.min.css' %}"> 
+
+    <!-- Facebook-like favicon -->
+    <link rel="icon" href="http://www.facebook.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="http://www.facebook.com/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header id="header" class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+        <h1>Feeds</h1>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </header>
+
+    <div class="container mt-4">
+        <!-- Create Post Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="{% url 'feed' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h3>Create a post</h3>
+                    <textarea class="form-control mb-3" name="content" rows="3" placeholder="What's on your mind?"></textarea>
+                    <input type="file" name="image" class="form-control mb-3">
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Display Posts -->
+        {% for message in messages %}
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5>{{ message.user.username }}</h5>
+                {% if message.user == request.user %}
+                <form action="{% url 'delete_post' message.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p>{{ message.content }}</p>
+                {% if message.image %}
+                    <img src="{{ message.image.url }}" alt="Post image" class="img-fluid mb-3">
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <!-- Like Button -->
+                <form action="{% url 'like_message' message.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link {% if message.user_has_liked %}text-primary{% endif %}">
+                        {% if message.user_has_liked %}Unlike{% else %}Like{% endif %}
+                    </button>
+                </form>
+                <span>{{ message.likes.count }} Like(s)</span>
+
+                <!-- Add Comment Section -->
+                <form action="{% url 'post_comment' message.id %}" method="post" class="mt-3">
+                    {% csrf_token %}
+                    <textarea class="form-control" name="content" rows="2" placeholder="Add a comment..."></textarea>
+                    <button type="submit" class="btn btn-secondary mt-2">Post Comment</button>
+                </form>
+
+                <!-- Comments Display -->
+                <div class="mt-4">
+                    {% for comment in message.comments.all %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                            {% if comment.user == request.user %}
+                            <form action="{% url 'delete_comment' comment.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'Bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script>
+        $(document).on('submit', '.like-form', function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var url = form.attr('action');
+            
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function(response) {
+                    var likeBtn = form.find('.like-btn');
+                    var likeCountSpan = form.next('.like-count');
+                    var likeCount = parseInt(likeCountSpan.text().split(' ')[0]);
+
+                    if (likeBtn.hasClass('text-primary')) {
+                        likeBtn.removeClass('text-primary').text('Like');
+                        likeCount--;
+                    } else {
+                        likeBtn.addClass('text-primary').text('Unlike');
+                        likeCount++;
+                    }
+
+                    likeCountSpan.text(likeCount + ' Like(s)');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

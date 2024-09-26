@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'css/newstyle.css' %}">
+    <script src="{% static 'js/login.js' %}"></script>
+</head>
+<body id="LoginBdy">
+    <div class="form">
+        <div class="card">
+            <form id="form" method="post" class="login">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>UserName</label>
+                    <input type="text" class="form-control" id="user" name="username" onkeyup="Validate()">
+                    <span id="err"></span>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" class="form-control" id="pass" name="password" onkeyup="Validate()">
+                    <span id="err1"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" class="btn-submit" value="Submit" onclick="Validate()">
+                    <a href="{% url 'register' %}">New User</a>
+                </div>
+            </form>
+        </div>
+    </div> 
+</body>
+</html>
