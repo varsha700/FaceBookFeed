@@ -8,9 +8,8 @@ from .models import Message, Comment, Like
 from django.http import JsonResponse
 
 #FeedApp Home method
-def  SHome(req):
-    UserName= "User"    
-    return render(req,"index.html",{"name":UserName})
+def home(request):
+    return render(request, 'home.html')
     
 # Register method
 def register(request):
