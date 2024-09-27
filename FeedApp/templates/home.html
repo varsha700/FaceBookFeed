@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+        /* Basic styling for the FB-like front page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 50px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #1877f2;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .login-btn {
+            background-color: #1877f2;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .login-btn:hover {
+            background-color: #145db2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hello, {{ user.username }}</h1>
+    <label>Login to view posts</label>
+    <form action="{% url 'login' %}" method="get">
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+</div>
+
+</body>
+</html>
